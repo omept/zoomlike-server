@@ -3,10 +3,11 @@
     /* 
     PIPE the stream of our client's video and audio device to a html video element.
     */
-
+    var socket = io('/');
     // first check if the browser has permitted the user to use camera and audio
     let allowVideo = false;
     let allowAudio = false;
+    const ROOM_ID = document.getElementById('roomId').value;
 
 
     let micChecker = navigator.permissions.query({ name: 'microphone' })
@@ -59,7 +60,18 @@
         browser().then(stream => {
             addVideoStream(myVideo, stream);
         }).catch(e => console.log(e));
+
+        // notify server by emitting    
+        socket.emit('join-room', { roomID: ROOM_ID });
     }
+
+    const connectToNewUser = () => {
+        console.log("new user");
+    };
+
+    socket.on('user-connected', () => {
+        connectToNewUser();
+    })
 
     const main = async () => {
         if (allowVideo && allowAudio) {
@@ -67,7 +79,6 @@
         } else {
             alert("To continue, allow permission for camera and microphone. ", playVideoStream());
         }
-
     }
 
 

@@ -4,6 +4,8 @@ const http = require('http');
 const { v4: uuidv4 } = require('uuid');
 const server = require('http').Server(app);
 
+const io = require('socket.io')(server);
+
 
 
 const main = async () => {
@@ -22,6 +24,30 @@ const main = async () => {
     app.get("/:room", (req, res) => {
         res.render('room', { roomId: req.params.room });
     });
+
+    // listen to socket connections
+    io.on('connection', (socket) => {
+
+        socket.on('join-room', (data) => {
+            const roomID = data.roomID;
+            if (roomID) {
+                // register the socket to the a channel
+                socket.join(roomID); // define roomID as channel to register to
+                console.log(' a user connected : ', data);
+
+                // emmit a brodcast to the channel.
+                socket.to(roomID).emit("user-connected");
+
+            }
+        });
+
+        // catch socket error before it catches us unaware
+        socket.on('error', (reason) => {
+            console.log(reason); // prints the message associated with the error, e.g. "thou shall not pass" in the example above
+        });
+
+    });
+
 
     server.listen(3030);
 }
