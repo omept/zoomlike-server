@@ -69,13 +69,16 @@
         browser().then(stream => {
             addVideoStream(myVideo, stream);
 
-
+            // register event listener for calls
             // recieve call from peer id
             peer.on('call', call => {
                 call.answer(stream);
+                //create video element to play stream
                 const vid = document.createElement('video');
                 call.on('stream', userVideoStream => {
+                    // add stream to display
                     addVideoStream(vid, userVideoStream);
+
                 });
             });
 
@@ -114,6 +117,7 @@
     }
 
 
+    // run permission checker before running main function
     Promise.all([camChecker, micChecker]).then(() => {
         main().catch(e => console.log(e));
     })
