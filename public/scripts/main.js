@@ -10,6 +10,15 @@
     const ROOM_ID = document.getElementById('roomId').value;
 
 
+    // configure webrtc 
+    let peer = new Peer(undefined, {
+        path: '/peerjs',
+        host: '/',
+        port: '3030'
+    });
+
+
+
     let micChecker = navigator.permissions.query({ name: 'microphone' })
         .then((permissionObj) => {
             if (permissionObj.state == "granted") {
@@ -59,19 +68,42 @@
     const playVideoStream = () => {
         browser().then(stream => {
             addVideoStream(myVideo, stream);
+
+
+            // recieve call from peer id
+            peer.on('call', call => {
+                call.answer(stream);
+                const vid = document.createElement('video');
+                call.on('stream', userVideoStream => {
+                    addVideoStream(vid, userVideoStream);
+                });
+            });
+
+            // websocket listener
+            socket.on('user-connected', (peerUserID) => {
+                connectToNewUser(peerUserID, stream);
+            })
         }).catch(e => console.log(e));
 
-        // notify server by emitting    
-        socket.emit('join-room', { roomID: ROOM_ID });
     }
 
-    const connectToNewUser = () => {
-        console.log("new user");
+    const connectToNewUser = (peerUserID, stream) => {
+
+        var call = peer.call(peerUserID, stream);
+        const vid = document.createElement('video');
+        call.on('stream', userVideoStream => {
+            addVideoStream(vid, userVideoStream);
+        });
+
     };
 
-    socket.on('user-connected', () => {
-        connectToNewUser();
-    })
+    //webrtc listener for new peers
+    peer.on('open', id => {
+        // notify server    
+        socket.emit('join-room', { roomID: ROOM_ID, peerUserId: id });
+    });
+
+
 
     const main = async () => {
         if (allowVideo && allowAudio) {
