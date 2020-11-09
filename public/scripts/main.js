@@ -11,6 +11,10 @@
     let peer = utils.peer();
     let ROOM_ID = utils.ROOM_ID;
 
+    let myVideoStream;
+
+    let muteToggle = $("#muteToggle");
+    let videoToggle = $("#videoToggle");
 
     // mic check 1 ** 2 ** 1 ** 2
     let micChecker = navigator.permissions.query({ name: 'microphone' })
@@ -63,6 +67,7 @@
     const playVideoStream = () => {
         browser().then((stream) => {
             customlogger("load permision for audio and video");
+            myVideoStream = stream; // set client stream
             addVideoStream(myVideo, stream);
 
             // register event listener for calls
@@ -113,8 +118,9 @@
     }
 
 
-
+    // mute or unmute action
     const muteUnmute = () => {
+        customlogger("myVideoStream audio track : ", myVideoStream.getAudioTracks());
         const enabled = myVideoStream.getAudioTracks()[0].enabled;
         if (enabled) {
             myVideoStream.getAudioTracks()[0].enabled = false;
@@ -125,8 +131,11 @@
         }
     }
 
+    muteToggle.bind("click", muteUnmute);
+
+    // video stop or play
     const playStop = () => {
-        console.log('object')
+        customlogger("myVideoStream video track : ", myVideoStream.getVideoTracks());
         let enabled = myVideoStream.getVideoTracks()[0].enabled;
         if (enabled) {
             myVideoStream.getVideoTracks()[0].enabled = false;
@@ -137,36 +146,38 @@
         }
     }
 
+    videoToggle.bind("click", playStop);
+
     const setMuteButton = () => {
         const html = `
-      <i class="fas fa-microphone"></i>
+      <i class="fa fa-microphone"></i>
       <span>Mute</span>
-    `
-        $('.main__mute_button').innerHTML = html;
+    `;
+        $('.main__mute_toggle').html(html);
     }
 
     const setUnmuteButton = () => {
         const html = `
-      <i class="unmute fas fa-microphone-slash"></i>
+      <i class="unmute fa fa-microphone-slash"></i>
       <span>Unmute</span>
-    `
-        $('.main__mute_button').innerHTML = html;
+    `;
+        $('.main__mute_toggle').html(html);
     }
 
     const setStopVideo = () => {
         const html = `
-      <i class="fas fa-video"></i>
+      <i class="fa fa-video-camera"></i>
       <span>Stop Video</span>
-    `
-        $('.main__video_button').innerHTML = html;
+    `;
+        $('.main__video_toggle').html(html);
     }
 
     const setPlayVideo = () => {
         const html = `
-    <i class="stop fas fa-video-slash"></i>
+    <i class="stop fa fa-eye-slash"></i>
       <span>Play Video</span>
-    `
-        $('.main__video_button').innerHTML = html;
+    `;
+        $('.main__video_toggle').html(html);
     }
 
 
