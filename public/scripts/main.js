@@ -26,7 +26,7 @@
             }
         })
         .catch((error) => {
-            console.log('Got microphone error :', error);
+            customlogger('Got microphone error :', error);
         });
 
 
@@ -37,7 +37,7 @@
             }
         })
         .catch((error) => {
-            console.log('Got camera error :', error);
+            customlogger('Got camera error :', error);
         });
 
 
@@ -48,6 +48,7 @@
             video.play();
         });
         videoGrid.append(video);
+        customlogger("add video stream");
 
     }
 
@@ -66,35 +67,41 @@
     }
 
     const playVideoStream = () => {
-        browser().then(stream => {
+        browser().then((stream) => {
+            customlogger("load permision for audio and video");
             addVideoStream(myVideo, stream);
 
             // register event listener for calls
             // recieve call from peer id
-            peer.on('call', call => {
-                call.answer(stream);
+            peer.on('call', (call) => {
+                var answerCall = call.answer(stream);
+
+                customlogger("peer answered call", { answerCall });
                 //create video element to play stream
                 const vid = document.createElement('video');
-                call.on('stream', userVideoStream => {
+                call.on('stream', (userVideoStream) => {
                     // add stream to display
+                    customlogger("stream event called for received call");
                     addVideoStream(vid, userVideoStream);
-
                 });
             });
 
             // websocket listener
             socket.on('user-connected', (peerUserID) => {
+                customlogger("user-connected called");
                 connectToNewUser(peerUserID, stream);
             })
-        }).catch(e => console.log(e));
+        }).catch(e => customlogger(e));
 
     }
 
     const connectToNewUser = (peerUserID, stream) => {
-
+        customlogger("called connectToNewUser to make call to peerUserID: ", peerUserID, " and listen to when a stream even is made on the call");
+        customlogger({ peerUserID, stream });
         var call = peer.call(peerUserID, stream);
         const vid = document.createElement('video');
-        call.on('stream', userVideoStream => {
+        call.on('stream', (userVideoStream) => {
+            customlogger("stream event has been sent for the call made");
             addVideoStream(vid, userVideoStream);
         });
 
@@ -102,6 +109,7 @@
 
     //webrtc listener for new peers
     peer.on('open', id => {
+        customlogger("new peer opened");
         // notify server    
         socket.emit('join-room', { roomID: ROOM_ID, peerUserId: id });
     });
@@ -119,7 +127,10 @@
 
     // run permission checker before running main function
     Promise.all([camChecker, micChecker]).then(() => {
-        main().catch(e => console.log(e));
-    })
+        main().catch(e => customlogger(e));
+    });
 
+    function customlogger(a, ...args) {
+        //console.log(a, args.length ? args : "");
+    }
 })()
