@@ -9,6 +9,7 @@
 
     // gset peer reference
     let peer = utils.peer();
+    let ROOM_ID = utils.ROOM_ID;
 
 
     // mic check 1 ** 2 ** 1 ** 2
@@ -81,12 +82,13 @@
 
             // websocket listener
             socket.on('user-connected', (peerUserID) => {
-                customlogger("user-connected called");
+                customlogger("user-connected called", peerUserID);
                 connectToNewUser(peerUserID, stream);
             })
         }).catch(e => customlogger(e));
 
     }
+
 
     const connectToNewUser = (peerUserID, stream) => {
         customlogger("called connectToNewUser to make call to peerUserID: ", peerUserID, " and listen to when a stream even is made on the call");
@@ -108,6 +110,63 @@
         } else {
             alert("To continue, allow permission for camera and microphone. ", playVideoStream());
         }
+    }
+
+
+
+    const muteUnmute = () => {
+        const enabled = myVideoStream.getAudioTracks()[0].enabled;
+        if (enabled) {
+            myVideoStream.getAudioTracks()[0].enabled = false;
+            setUnmuteButton();
+        } else {
+            setMuteButton();
+            myVideoStream.getAudioTracks()[0].enabled = true;
+        }
+    }
+
+    const playStop = () => {
+        console.log('object')
+        let enabled = myVideoStream.getVideoTracks()[0].enabled;
+        if (enabled) {
+            myVideoStream.getVideoTracks()[0].enabled = false;
+            setPlayVideo()
+        } else {
+            setStopVideo()
+            myVideoStream.getVideoTracks()[0].enabled = true;
+        }
+    }
+
+    const setMuteButton = () => {
+        const html = `
+      <i class="fas fa-microphone"></i>
+      <span>Mute</span>
+    `
+        $('.main__mute_button').innerHTML = html;
+    }
+
+    const setUnmuteButton = () => {
+        const html = `
+      <i class="unmute fas fa-microphone-slash"></i>
+      <span>Unmute</span>
+    `
+        $('.main__mute_button').innerHTML = html;
+    }
+
+    const setStopVideo = () => {
+        const html = `
+      <i class="fas fa-video"></i>
+      <span>Stop Video</span>
+    `
+        $('.main__video_button').innerHTML = html;
+    }
+
+    const setPlayVideo = () => {
+        const html = `
+    <i class="stop fas fa-video-slash"></i>
+      <span>Play Video</span>
+    `
+        $('.main__video_button').innerHTML = html;
     }
 
 

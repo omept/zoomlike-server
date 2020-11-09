@@ -37,26 +37,23 @@ const main = async () => {
     io.on('connection', (socket) => {
 
         socket.on('join-room', (data) => {
-            const roomID = data.roomID;
-            const peerUserID = data.peerUserId;
+            const { roomID, peerUserId } = data;
             if (roomID) {
                 // register the socket to the a channel
                 socket.join(roomID); // define roomID as channel to register to
                 console.log(' a user connected : ', data);
 
                 // emmit a brodcast to the channel.
-                socket.to(roomID).emit("user-connected", peerUserID);
-
+                socket.to(roomID).emit("user-connected", peerUserId);
+                console.log(' emit user connected passed peerUserId : ', peerUserId, " passing roomID  as :", roomID);
             }
         });
 
         socket.on('message', (data) => {
             const { ROOM_ID, message } = data;
             if (ROOM_ID) {
-                console.log(' message was sent to a room : ', data);
                 // emmit a brodcast to the channel.
-                socket.to(ROOM_ID).emit("new-message", { message });
-
+                socket.to(ROOM_ID).broadcast.emit("new-message", { message });
             }
         });
 
@@ -65,10 +62,7 @@ const main = async () => {
             console.log(reason); // prints the message associated with the error, e.g. "thou shall not pass" in the example above
         });
 
-        // catch socket error before it catches us unaware
-        socket.on('message', (reason) => {
-            console.log(reason); // prints the message associated with the error, e.g. "thou shall not pass" in the example above
-        });
+
 
     });
 
