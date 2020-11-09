@@ -1,3 +1,8 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #video-grid {
   display: flex;
   justify-content: center;
@@ -6,4 +11,49 @@
 video {
   height: 300px;
   width: 400px;
+}
+
+.main {
+  height: 100vh;
+  display: flex;
+}
+
+.main__left {
+  flex-basis: 80%;
+  border-right: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+}
+
+.main__videos {
+  flex-grow: 1;
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main__right {
+  padding: 0 1rem;
+  flex-basis: 20%;
+}
+
+.main__controls {
+  display: flex;
+  background-color: #1c1e20;
+  color: #fff;
+  pad: 2rem;
+}
+.main__controls__block {
+  display: flex;
+  font-size: large;
+  margin: 1rem 0;
+}
+
+.main__controls__button {
+  display: flex;
+  flex-direction: column;
+  margin: 0 1rem;
+  justify-content: center;
+  align-items: center;
 }
