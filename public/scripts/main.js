@@ -1,24 +1,17 @@
 (() => {
     "use strict"
-    /* 
-    PIPE the stream of our client's video and audio device to a html video element.
-    */
-    var socket = io('/');
+
+    let socket = utils.socket;
+    let customlogger = utils.customlogger;
     // first check if the browser has permitted the user to use camera and audio
     let allowVideo = false;
     let allowAudio = false;
-    const ROOM_ID = document.getElementById('roomId').value;
+
+    // gset peer reference
+    let peer = utils.peer();
 
 
-    // configure webrtc 
-    let peer = new Peer(undefined, {
-        path: '/peerjs',
-        host: '/',
-        port: '3030'
-    });
-
-
-
+    // mic check 1 ** 2 ** 1 ** 2
     let micChecker = navigator.permissions.query({ name: 'microphone' })
         .then((permissionObj) => {
             if (permissionObj.state == "granted") {
@@ -29,7 +22,7 @@
             customlogger('Got microphone error :', error);
         });
 
-
+    // cam check (can the people at the back see me ?? 😂)
     let camChecker = navigator.permissions.query({ name: 'camera' })
         .then((permissionObj) => {
             if (permissionObj.state == "granted") {
@@ -41,7 +34,7 @@
         });
 
 
-    // stream pipper to video input. 😂
+    // stream pipper to video input. 😂 (pipper is funny, IMO *** IYAM)
     const addVideoStream = (video, stream) => {
         video.srcObject = stream;
         video.addEventListener('loadedmetadata', () => {
@@ -107,13 +100,6 @@
 
     };
 
-    //webrtc listener for new peers
-    peer.on('open', id => {
-        customlogger("new peer opened");
-        // notify server    
-        socket.emit('join-room', { roomID: ROOM_ID, peerUserId: id });
-    });
-
 
 
     const main = async () => {
@@ -130,7 +116,4 @@
         main().catch(e => customlogger(e));
     });
 
-    function customlogger(a, ...args) {
-        //console.log(a, args.length ? args : "");
-    }
 })()

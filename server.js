@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const http = require('http');
 const { ExpressPeerServer } = require('peer');
 const { v4: uuidv4 } = require('uuid');
 const server = require('http').Server(app);
@@ -51,8 +50,23 @@ const main = async () => {
             }
         });
 
+        socket.on('message', (data) => {
+            const { ROOM_ID, message } = data;
+            if (ROOM_ID) {
+                console.log(' message was sent to a room : ', data);
+                // emmit a brodcast to the channel.
+                socket.to(ROOM_ID).emit("new-message", { message });
+
+            }
+        });
+
         // catch socket error before it catches us unaware
         socket.on('error', (reason) => {
+            console.log(reason); // prints the message associated with the error, e.g. "thou shall not pass" in the example above
+        });
+
+        // catch socket error before it catches us unaware
+        socket.on('message', (reason) => {
             console.log(reason); // prints the message associated with the error, e.g. "thou shall not pass" in the example above
         });
 

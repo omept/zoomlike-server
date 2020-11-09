@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoom clone</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles/fontawesome/css/font-awesome.min.css">
 </head>
 
@@ -23,13 +24,34 @@
             <div class="main__controls">
                 <div class="main__controls__block">
                     <div class="main__controls__button">
-                        <i class="fa fa-microphone fa-2x"></i>
+                        <i class="fa fa-microphone "></i>
                         <span> Mute </span>
                     </div>
                     <div class="main__controls__button">
-                        <i class="fa fa-video-camera fa-2x"></i>
+                        <i class="fa fa-video-camera "></i>
                         <span> Stop Video </span>
                     </div>
+                </div>
+                <div class="main__controls__block">
+                    <div class="main__controls__button">
+                        <i class="fa fa-shield "></i>
+                        <span> Security </span>
+                    </div>
+                    <div class="main__controls__button">
+                        <i class="fa fa-users"></i>
+                        <span> Participants </span>
+                    </div>
+                    <div class="main__controls__button">
+                        <i class="fa fa-comment-o"></i>
+                        <span> Chat </span>
+                    </div>
+                </div>
+                <div class="main__controls__block">
+                    <div class="main__controls__button">
+                        <i class=" "></i>
+                        <span> Leave Meeting </span>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -37,12 +59,25 @@
             <div class="main__header">
                 <h6>Chat</h6>
             </div>
+            <div class="main__chat_window">
+                <ul class="messages">
+
+                </ul>
+            </div>
+            <div class="main_message_container">
+                <input type="text" id="chat_message" placeholder="Type message here ...">
+            </div>
+
         </div>
 
     </div>
 </body>
+<script src="scripts/jquery.min.js"></script>
+<!-- <script src="scripts/bootstrap/js/bootstrap.min.js"></script> -->
 <script src="socket.io/socket.io.js"></script>
 <script src="scripts/peerjs.min.js"></script>
+<script src="scripts/util.js"></script>
 <script src="scripts/main.js"></script>
+<script src="scripts/chat.js"></script>
 
 </html>
