@@ -54,6 +54,15 @@ const main = async () => {
             if (ROOM_ID) {
                 // emmit a brodcast to the channel.
                 socket.to(ROOM_ID).broadcast.emit("new-message", { message });
+
+            }
+        });
+
+        socket.on('screen-share-init', (data) => {
+            const { roomID, peerUserId } = data;
+            if (roomID) {
+                // emmit a brodcast to the channel.
+                socket.to(roomID).broadcast.emit("user-screen-share", { roomID, peerUserId });
             }
         });
 

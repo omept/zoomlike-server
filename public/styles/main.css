@@ -8,6 +8,17 @@ body {
   justify-content: center;
 }
 
+#video-grid.smaller {
+  display: flex;
+  justify-content: top;
+  align-items: flex-start;
+}
+
+#video-grid.smaller > video {
+  height: 100px;
+  width: 200px;
+}
+
 video {
   height: 300px;
   width: 400px;
@@ -31,6 +42,11 @@ video {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.main__videos.has-share {
+  flex-direction: column;
+  align-items: start;
 }
 
 .main__right {
@@ -61,7 +77,7 @@ video {
 }
 
 .main__controls__block:last-child {
-  color: #f00;
+  color: #cc3833;
 }
 
 .main__controls__button {
@@ -126,4 +142,22 @@ video {
 
 #sender {
   background-color: #b5aeae !important;
+}
+
+.unmute {
+  color: #cc3833;
+}
+
+#screen-share.visible {
+  background-color: #cc3833;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#screen-share.visible video {
+  height: 80vh;
+  width: 100%;
 }
