@@ -60,7 +60,7 @@ const main = async () => {
 
         socket.on('screen-share-init', (data) => {
             const { roomID, peerUserId } = data;
-            if (roomID) {
+            if (roomID && peerUserId) {
                 // emmit a brodcast to the channel.
                 socket.to(roomID).broadcast.emit("user-screen-share", { roomID, peerUserId });
             }
