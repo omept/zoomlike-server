@@ -1,6 +1,6 @@
 ### Tutorial Codebase
 
-# Realtime Video Conferencing, Screen sharing and Chat with WebRTC, Socket.io and NodeJS
+# Realtime Video Conferencing, Screen Sharing and Chat with WebRTC, Socket.io and NodeJS
 
 ---
 
@@ -41,5 +41,4 @@
 <br/>
 <br/>
 
-[^1]:
-    <p>Contact deails: <br /></p> <br /> email : georgetheprogrammer@gmail.com <br /> twitter : https://twitter.com/ong_gtp <br />
+[^1]: <br /> email : georgetheprogrammer@gmail.com <br /> twitter : https://twitter.com/ong_gtp <br />
