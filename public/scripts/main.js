@@ -262,18 +262,18 @@
             // if screen is being shared
             currentlySharingScreen = false;
             stopCapture();
-            // stop  video stream and audio stream of mirror
+            // start  video stream and audio stream of mirror
             if (!aEnabled) {
-                myVideoStream.getAudioTracks()[0].enabled = false;
+                myVideoStream.getAudioTracks()[0].enabled = true;
                 setMuteButton();
             }
 
             if (!vEnabled) {
-                myVideoStream.getVideoTracks()[0].enabled = false;
+                myVideoStream.getVideoTracks()[0].enabled = true;
                 setStopVideo()
             }
 
-            customlogger("cancel share sreen");
+            customlogger("cancel share sreen and continues video conferencing");
         }
     }
 
